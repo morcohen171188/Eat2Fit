@@ -1,0 +1,1 @@
+web: gunicorn Eat2Fit_REST:app
