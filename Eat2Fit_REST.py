@@ -32,9 +32,9 @@ def create_store():
 def get_recommended_dishes(data):
     response = ''
     try:
-        response2 = subprocess.check_output([sys.executable,'rateCalculation.py',data])
+        response = subprocess.check_output([sys.executable,'rateCalculation.py',data])
     except subprocess.CalledProcessError as e:
-        response = response2
+        print(response)
     response = "".join(map(chr, response))
     response = util.clean_string(response)
     return jsonify(response)
