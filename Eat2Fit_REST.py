@@ -30,7 +30,7 @@ def create_store():
 #get /restaurant/<name> data: {name :}
 @app.route('/restaurant/<string:data>')
 def get_recommended_dishes(data):
-    response = subprocess.check_output([sys.executable,'rateCalculation.py',data])
+    response = subprocess.call([sys.executable,'rateCalculation.py',data])
     response = "".join(map(chr, response))
     response = util.clean_string(response)
     return jsonify(response)
