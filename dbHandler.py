@@ -1,6 +1,7 @@
 from firebase.firebase import FirebaseApplication
 from firebase.firebase import FirebaseAuthentication
-import rateCalculation
+from string import Template
+import rateCalculation, json
 
 class dbHandler:
 
@@ -17,9 +18,9 @@ class dbHandler:
         self.firebaseClient.authentication = authentication
         user = authentication.get_user()
 
-    def GetAllUsers(self):
+    def GetNewUserId(self):
         result_stractured_data = self.firebaseClient.get('/users', None)
-        return result_stractured_data
+        return len(result_stractured_data)
 
     def GetAllRestaurants(self):
         result_stractured_data =  self.firebaseClient.get('/restaurants', None)
@@ -52,6 +53,8 @@ class dbHandler:
 
     def GetUserPreviouslyLiked(self, user_id):
         result_stractured_data = self.firebaseClient.get('/users/{0}/previouslyLiked'.format(user_id), None)
+        if result_stractured_data is None:
+            result_stractured_data = []
         return result_stractured_data
 
     def UpdateUserPreviouslyLiked(self, user_id, Dish):
@@ -77,6 +80,12 @@ class dbHandler:
             result_stractured_data.append(ingredient)
         self.firebaseClient.put('/users/{0}/userPreferences'.format(user_id),'DISLIKED',result_stractured_data)
 
+    def SaveNewUserPreferences(self, user_data):
+        new_user_id = self.GetNewUserId()
+        template_data = Template(user_data)
+        str_data = template_data.substitute(user_id=new_user_id)
+        self.firebaseClient.patch('/users/{0}'.format(new_user_id),json.loads(str_data))
+
     # maybe we dont need it
     def get_recommended_dishes(self, restName):
         pref = self.GetUserPreferences(0)
@@ -84,3 +93,6 @@ class dbHandler:
         pref = rateCalculation.PreProcessUserPreferences(pref, self.ingredients)
         return rateCalculation.CalculateBestMatchDishes(pref,dishes,self.ingredients)
 
+if __name__ == "__main__":
+    db = dbHandler()
+    db.SaveNewUserPreferences('{"userId":${user_id},"userName":"test","userPreferences":{"KOSHER":1,"VEGETARIAN":0,"VEGAN":0,"LIKED":["MEAT"],"DISLIKED":["DAIRY"]},"previouslyLiked":[]}')

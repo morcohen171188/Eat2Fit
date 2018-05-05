@@ -1,7 +1,7 @@
 from flask import Flask,jsonify,request
 import subprocess
 import sys
-import util
+import dbHandler
 
 
 app = Flask(__name__)
@@ -11,34 +11,23 @@ stores = [{
     'items': [{'name':'my item', 'price': 15.99 }]
 }]
 
+db = dbHandler.dbHandler()
+
 @app.route('/')
 def home():
     pass
 
-#post /store data: {name :}
-@app.route('/store' , methods=['POST'])
-def create_store():
+#post /user data: {name :}
+@app.route('/user' , methods=['POST'])
+def create_user():
   request_data = request.get_json()
-  new_store = {
-    'name':request_data['name'],
-    'items':[]
-  }
-  stores.append(new_store)
-  return jsonify(new_store)
+  db.saveNewUserPreferences(user_data=request_data)
+  return 0
   #pass
 
 #get /restaurant/<name> data: {name :}
 @app.route('/restaurant/<string:data>')
 def get_recommended_dishes(data):
-    #response = ''
-    #try:
-    #    response = subprocess.check_output([sys.executable,'rateCalculation.py',data])
-    #except subprocess.CalledProcessError as e:
-    #    print(response)
-    #response = "".join(map(chr, response))
-    #response = util.clean_string(response)
-    #return jsonify(response)
-
     r = subprocess.Popen([sys.executable,'rateCalculation.py',data], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     datar = r.communicate()
     return datar
