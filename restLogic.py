@@ -5,6 +5,7 @@ def calcDishesRates(userPreferences, ingredientsGroups, Dish):
     dish_results = {}
     meat_kosher_flag = 0;
     dairy_kosher_flag = 0;
+    number_of_disliked = 0;
     dish_id = Dish['name']
     dish_results[dish_id] = 0
     for ingredient in Dish['ingredients']:
@@ -36,16 +37,17 @@ def calcDishesRates(userPreferences, ingredientsGroups, Dish):
                     break
         if ingredient in userPreferences["LIKED"]:
             dish_results[dish_id] += 1
-        elif "DISLIKED" in userPreferences:
+        else:
             if ingredient in userPreferences["DISLIKED"]:
                 dish_results[dish_id] -= 1
-        else:
-            for ingredient_liked in userPreferences["LIKED"]:
-                result_similarity = SemanticWordSimilarityCalculator.calculateSemanticWordSimilarity(ingredient, ingredient_liked)
+                number_of_disliked += 1
+            else:
+                result_similarity = SemanticWordSimilarityCalculator.calculateSemanticWordSimilarity(ingredient, userPreferences["LIKED"])
                 if result_similarity > 0.7:
                     dish_results[dish_id] += 1
-                break
-    return dish_results
+                else:
+                    number_of_disliked += 1
+    return [dish_results,number_of_disliked]
 
 def recalcRatesByPreviouslyLiked(dish_results, previouslyLiked, Dish):
     for dish in dish_results:

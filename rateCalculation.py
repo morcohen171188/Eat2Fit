@@ -32,8 +32,17 @@ class CalcBestMatchDishes(object):
 
     def __call__(self, Dish):
         dish_results = restLogic.calcDishesRates(self._userPreferences, self._ingredientsGroups, Dish)
-        restLogic.recalcRatesByPreviouslyLiked(dish_results, self._previouslyLiked, Dish)
-        return dish_results
+        number_of_disliked = dish_results[1] if dish_results[1] != 0 else 1
+        dish_rate = dish_results[0]
+        restLogic.recalcRatesByPreviouslyLiked(dish_rate, self._previouslyLiked, Dish)
+        dish_score = dish_rate[Dish['name']]
+
+        if dish_score > 0:
+            dish_score_perc = dish_score / (dish_score + number_of_disliked)
+        else:
+            dish_score_perc = 0
+        dish_rate[Dish['name']] = int(dish_score_perc*100)
+        return dish_rate
 
 def PreProcessUserPreferences(userPreferences, ingredientsGroups):
     some_list = []
