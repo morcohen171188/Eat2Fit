@@ -1,3 +1,5 @@
+import SemanticWordSimilarityCalculator
+
 
 def calcDishesRates(userPreferences, ingredientsGroups, Dish):
     dish_results = {}
@@ -34,9 +36,15 @@ def calcDishesRates(userPreferences, ingredientsGroups, Dish):
                     break
         if ingredient in userPreferences["LIKED"]:
             dish_results[dish_id] += 1
-        if "DISLIKED" in userPreferences:
+        elif "DISLIKED" in userPreferences:
             if ingredient in userPreferences["DISLIKED"]:
                 dish_results[dish_id] -= 1
+        else:
+            for ingredient_liked in userPreferences["LIKED"]:
+                result_similarity = SemanticWordSimilarityCalculator.calculateSemanticWordSimilarity(ingredient, ingredient_liked)
+                if result_similarity > 0.7:
+                    dish_results[dish_id] += 1
+                break
     return dish_results
 
 def recalcRatesByPreviouslyLiked(dish_results, previouslyLiked, Dish):
