@@ -71,6 +71,7 @@ def PreProcessUserPreferences(userPreferences, ingredientsGroups):
     return userPreferences
 
 def main():
+    pool_outputs = []
     data = sys.argv[1]
     (rest_name, user_id) = util.parse_url_data(data)
     globals = Globals.Globals(user_id)
@@ -81,7 +82,8 @@ def main():
     pool = MyPool()
     pool._processes = 20
     pool_outputs = pool.map(CalcBestMatchDishes(ingredientsGroups, userPreferences, previouslyLiked), Dishes)
-    print(pool_outputs)
+    top5 = sorted(pool_outputs, key=lambda x: list(x.values())[0], reverse=True)[:5]
+    print(top5)
     return 'ok'
 
 if __name__ == "__main__":
