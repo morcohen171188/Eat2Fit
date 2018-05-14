@@ -1,6 +1,5 @@
 from nltk.corpus import wordnet
 
-
 def calculateSemanticWordSimilarity(word1, wordList):
     result_list = []
     result = 0.0
@@ -11,12 +10,13 @@ def calculateSemanticWordSimilarity(word1, wordList):
     for word in wordList:
         synword2 = wordnet.synsets(word)
 
-        if synword1 and synword2[:3]:
-            for syn1 in synword1[:3]:
-                for syn2 in synword2:
-                    s = syn1.wup_similarity(syn2)
-                    if s is not None:
-                        result_list.append(s)
+        if synword1 and synword2:
+            #for syn1 in synword1[:3]:
+                #for syn2 in synword2[:3]:
+                    #s = syn1.wup_similarity(syn2)
+            s = synword1[0].wup_similarity(synword2[0])
+            if s is not None:
+                result_list.append(s)
     result = max(result_list) if (result_list != []) else 0
 
     return result
