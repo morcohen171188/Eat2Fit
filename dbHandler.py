@@ -88,9 +88,10 @@ class dbHandler:
 
     def SaveNewUserPreferences(self, user_data):
         new_user_id = self.GetNewUserId()
-        template_data = Template(user_data)
-        str_data = template_data.substitute(user_id=new_user_id)
-        self.firebaseClient.patch('/users/{0}'.format(new_user_id),json.loads(str_data))
+        user_data["userId"] = new_user_id
+        #template_data = Template(user_data)
+        #str_data = template_data.substitute(user_id=new_user_id)
+        self.firebaseClient.patch('/users/{0}'.format(new_user_id),json.loads(user_data))
 
     # maybe we dont need it
     def get_recommended_dishes(self, restName):

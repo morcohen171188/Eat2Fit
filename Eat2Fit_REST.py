@@ -21,7 +21,7 @@ def home():
 @app.route('/user' , methods=['POST'])
 def create_user():
   request_data = request.get_json()
-  db.saveNewUserPreferences(user_data=request_data)
+  db.SaveNewUserPreferences(user_data=request_data)
   return 0
   #pass
 
