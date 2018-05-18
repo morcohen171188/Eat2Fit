@@ -6,11 +6,6 @@ import dbHandler
 
 app = Flask(__name__)
 
-stores = [{
-    'name': 'My Store',
-    'items': [{'name':'my item', 'price': 15.99 }]
-}]
-
 db = dbHandler.dbHandler()
 
 @app.route('/')
@@ -21,9 +16,7 @@ def home():
 @app.route('/user' , methods=['POST'])
 def create_user():
   request_data = request.get_json()
-  db.SaveNewUserPreferences(user_data=request_data)
-  return "200"
-  #pass
+  return db.SaveNewUserPreferences(user_data=request_data)
 
 #get /restaurant/<name> data: {name :}
 @app.route('/restaurant/<string:data>')
@@ -42,16 +35,6 @@ def get_stores():
 @app.route('/store/<string:name>/item' , methods=['POST'])
 def create_item_in_store(name):
   request_data = request.get_json()
-  for store in stores:
-    if store['name'] == name:
-        new_item = {
-            'name': request_data['name'],
-            'price': request_data['price']
-        }
-        store['items'].append(new_item)
-        return jsonify(new_item)
-  return jsonify ({'message' :'store not found'})
-  #pass
 
 
 if __name__ == '__main__':
