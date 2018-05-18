@@ -91,7 +91,7 @@ class dbHandler:
         user_data["userId"] = new_user_id
         #template_data = Template(user_data)
         #str_data = template_data.substitute(user_id=new_user_id)
-        self.firebaseClient.patch('/users/{0}'.format(new_user_id),json.loads(user_data))
+        self.firebaseClient.patch('/users/{0}'.format(new_user_id),user_data)
 
     # maybe we dont need it
     def get_recommended_dishes(self, restName):
