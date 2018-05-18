@@ -63,7 +63,7 @@ class dbHandler:
 
     def UpdateUserPreviouslyLiked(self, user_id, Dish):
         result_stractured_data = self.firebaseClient.get('/users/{0}/previouslyLiked'.format(user_id), None)
-        if result_stractured_data is None:
+        if result_stractured_data is None or "none" in result_stractured_data:
             result_stractured_data = []
         result_stractured_data.append(Dish)
         self.firebaseClient.put('/users/{0}'.format(user_id),'previouslyLiked',result_stractured_data)
@@ -89,15 +89,17 @@ class dbHandler:
     def SaveNewUserPreferences(self, user_data):
         new_user_id = self.GetNewUserId()
         user_data["userId"] = new_user_id
+        if user_data['userPreferences']['DISLIKED'] == []:
+            user_data['userPreferences']['DISLIKED'] = ["none"]
+        if user_data['userPreferences']['LIKED'] == []:
+            user_data['userPreferences']['LIKED'] = ["none"]
+        if user_data['previouslyLiked'] == []:
+            user_data['previouslyLiked'] = ["none"]
+
+
         self.firebaseClient.patch('/users/{0}'.format(new_user_id),user_data)
         return str(new_user_id)
 
-    # maybe we dont need it
-    def get_recommended_dishes(self, restName):
-        pref = self.GetUserPreferences(0)
-        dishes = self.GetAllDishesFromRestaurant(restName)
-        pref = rateCalculation.PreProcessUserPreferences(pref, self.ingredients)
-        return rateCalculation.CalculateBestMatchDishes(pref,dishes,self.ingredients)
 
 if __name__ == "__main__":
     db = dbHandler()

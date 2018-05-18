@@ -27,14 +27,16 @@ def get_recommended_dishes(data):
 
 #get /users
 @app.route('/users')
-def get_stores():
+def get_useres():
   return jsonify(db.GetUsers())
   #pass
 
-#post /store/<name> data: {name :}
-@app.route('/store/<string:name>/item' , methods=['POST'])
-def create_item_in_store(name):
+#post /userupdate data: {name :}
+@app.route('/user/<string:userid>/update' , methods=['POST'])
+def update_user(userid):
   request_data = request.get_json()
+  db.updateUserPreferences(userid, preferences=request_data)
+  return "200 ok"
 
 
 if __name__ == '__main__':
