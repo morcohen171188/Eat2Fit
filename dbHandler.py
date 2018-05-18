@@ -22,6 +22,10 @@ class dbHandler:
         result_stractured_data = self.firebaseClient.get('/users', None)
         return len(result_stractured_data)
 
+    def GetUsers(self):
+        result_stractured_data = self.firebaseClient.get('/users', None)
+        return result_stractured_data
+
     def GetAllRestaurants(self):
         result_stractured_data =  self.firebaseClient.get('/restaurants', None)
         return result_stractured_data
@@ -72,13 +76,15 @@ class dbHandler:
             result_stractured_data.append(ingredient)
         self.firebaseClient.put('/users/{0}/userPreferences'.format(user_id),'LIKED',result_stractured_data)
 
-    def UpdateUserDislikedPreferences(self, user_id, likedIngredients):
+    def UpdateUserDislikedPreferences(self, user_id, dislikedIngredients):
         result_stractured_data = self.firebaseClient.get('/users/{0}/userPreferences/DISLIKED'.format(user_id), None)
         if result_stractured_data is None:
             result_stractured_data = []
-        for ingredient in likedIngredients:
-            result_stractured_data.append(ingredient)
-        self.firebaseClient.put('/users/{0}/userPreferences'.format(user_id),'DISLIKED',result_stractured_data)
+        old_dislikedlist = set(result_stractured_data)
+        add_unliked_items_only_list = list(set(dislikedIngredients)-set(self.GetUserPreferences(user_id)['LIKED']))
+        new_disliked_list = list(old_dislikedlist | add_unliked_items_only_list)
+
+        self.firebaseClient.put('/users/{0}/userPreferences'.format(user_id),'DISLIKED',new_disliked_list)
 
     def SaveNewUserPreferences(self, user_data):
         new_user_id = self.GetNewUserId()

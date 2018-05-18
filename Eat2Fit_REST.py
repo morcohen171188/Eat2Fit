@@ -32,10 +32,10 @@ def get_recommended_dishes(data):
     datar = r.communicate()
     return datar
 
-#get /store
-@app.route('/store')
+#get /users
+@app.route('/users')
 def get_stores():
-  return jsonify({'stores': stores})
+  return jsonify(db.GetUsers())
   #pass
 
 #post /store/<name> data: {name :}
