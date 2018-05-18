@@ -22,7 +22,7 @@ def home():
 def create_user():
   request_data = request.get_json()
   db.SaveNewUserPreferences(user_data=request_data)
-  return 0
+  return "200"
   #pass
 
 #get /restaurant/<name> data: {name :}
