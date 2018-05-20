@@ -29,14 +29,11 @@ def get_recommended_dishes(data):
 @app.route('/users')
 def get_useres():
   return jsonify(db.GetUsers())
-  #pass
 
 #get /restaurants
 @app.route('/restaurants')
 def get_restaurants():
-  return "smadar:32.442244:34.915156"
-  #pass
-
+  return jsonify(db.GetRestaurants())
 
 #post /userupdate data: {name :}
 @app.route('/user/<string:userid>/update' , methods=['POST'])
@@ -45,6 +42,12 @@ def update_user(userid):
   db.updateUserPreferences(userid, preferences=request_data)
   return "200 ok"
 
+#post /userupdatepreviously data: {name :}
+@app.route('/user/<string:userid>/updatepreviously' , methods=['POST'])
+def update_previously_liked(userid):
+  request_data = request.get_json()
+  db.UpdateUserPreviouslyLiked(userid, Dish=request_data)
+  return "200 ok"
 
 if __name__ == '__main__':
     app.run(port=5000)

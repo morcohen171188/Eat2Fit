@@ -26,6 +26,10 @@ class dbHandler:
         result_stractured_data = self.firebaseClient.get('/users', None)
         return result_stractured_data
 
+    def GetRestaurants(self):
+        result_stractured_data = self.firebaseClient.get('/restaurants', None)
+        return result_stractured_data
+
     def GetAllRestaurants(self):
         result_stractured_data =  self.firebaseClient.get('/restaurants', None)
         return result_stractured_data
