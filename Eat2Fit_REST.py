@@ -31,6 +31,13 @@ def get_useres():
   return jsonify(db.GetUsers())
   #pass
 
+#get /restaurants
+@app.route('/restaurants')
+def get_restaurants():
+  return "smadar:32.442244:34.915156"
+  #pass
+
+
 #post /userupdate data: {name :}
 @app.route('/user/<string:userid>/update' , methods=['POST'])
 def update_user(userid):
