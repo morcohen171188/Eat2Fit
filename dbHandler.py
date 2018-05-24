@@ -66,6 +66,7 @@ class dbHandler:
         return result_stractured_data
 
     def UpdateUserPreviouslyLiked(self, user_id, Dish):
+
         result_stractured_data = self.firebaseClient.get('/users/{0}/previouslyLiked'.format(user_id), None)
         if result_stractured_data is None or "none" in result_stractured_data:
             result_stractured_data = []
