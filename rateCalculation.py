@@ -74,6 +74,7 @@ def main():
     pool_outputs = []
     data = sys.argv[1]
     (rest_name, user_id) = util.parse_url_data(data)
+    rest_name.replace("%20", " ")
     globals = Globals.Globals(user_id)
     ingredientsGroups = globals.getIngredientsGroups()
     Dishes = globals.getDb().GetAllDishesFromRestaurant(rest_name)
