@@ -65,12 +65,18 @@ class dbHandler:
             result_stractured_data = []
         return result_stractured_data
 
-    def UpdateUserPreviouslyLiked(self, user_id, Dish):
+    def UpdateUserPreviouslyLiked(self, user_id, Dishes):
 
         result_stractured_data = self.firebaseClient.get('/users/{0}/previouslyLiked'.format(user_id), None)
         if result_stractured_data is None or "none" in result_stractured_data:
             result_stractured_data = []
-        result_stractured_data.append(Dish)
+
+        for dish in Dishes["LIKED"]:
+            restName, dishName = dish.split(":")
+            allDishesFromRest = self.GetAllDishesFromRestaurant(restName)
+            for rest_dish in allDishesFromRest:
+                if rest_dish['name'] == dishName:
+                    result_stractured_data.append(rest_dish)
         self.firebaseClient.put('/users/{0}'.format(user_id),'previouslyLiked',result_stractured_data)
 
     def UpdateUserLikedPreferences(self, user_id, likedIngredients):

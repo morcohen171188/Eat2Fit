@@ -46,7 +46,7 @@ def update_user(userid):
 @app.route('/user/<string:userid>/updatepreviously' , methods=['POST'])
 def update_previously_liked(userid):
   request_data = request.get_json()
-  db.UpdateUserPreviouslyLiked(userid, Dish=request_data)
+  db.UpdateUserPreviouslyLiked(userid, request_data)
   return "200 ok"
 
 if __name__ == '__main__':
