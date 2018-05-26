@@ -50,8 +50,9 @@ def calcDishesRates(userPreferences, ingredientsGroups, Dish):
     return [dish_results,number_of_disliked]
 
 def recalcRatesByPreviouslyLiked(dish_results, previouslyLiked, Dish):
-    for dish in dish_results:
-        dish_set = set(Dish['ingredients'])
-        for perLikedDish in previouslyLiked:
-            preLiked_set = set(perLikedDish['ingredients'])
-            dish_results[dish] += len(dish_set.intersection(preLiked_set))
+    if "none" not in previouslyLiked:
+        for dish in dish_results:
+            dish_set = set(Dish['ingredients'])
+            for perLikedDish in previouslyLiked:
+                preLiked_set = set(perLikedDish['ingredients'])
+                dish_results[dish] += len(dish_set.intersection(preLiked_set))
