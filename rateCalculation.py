@@ -34,6 +34,7 @@ class CalcBestMatchDishes(object):
         dish_results = restLogic.calcDishesRates(self._userPreferences, self._ingredientsGroups, Dish)
         number_of_disliked = dish_results[1] if dish_results[1] != 0 else 1
         dish_rate = dish_results[0]
+        print ("")
         restLogic.recalcRatesByPreviouslyLiked(dish_rate, self._previouslyLiked, Dish)
         dish_score = dish_rate[Dish['name']]
 
