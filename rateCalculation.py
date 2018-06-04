@@ -81,7 +81,7 @@ def main():
     userPreferences = (PreProcessUserPreferences(globals.getUserPreferences(), ingredientsGroups))
     previouslyLiked = globals.getDb().GetUserPreviouslyLiked(user_id)
     pool = MyPool()
-    pool._processes = 4
+    pool._processes = 20
     pool_outputs = pool.map(CalcBestMatchDishes(ingredientsGroups, userPreferences, previouslyLiked), Dishes)
     top5 = sorted(pool_outputs, key=lambda x: list(x.values())[0], reverse=True)[:5]
     print(top5)
