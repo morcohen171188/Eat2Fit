@@ -23,8 +23,8 @@ def create_user():
 @app.route('/restaurant/<string:data>')
 def get_recommended_dishes(data):
     #r = subprocess.Popen([sys.executable,'rateCalculation.py',data], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-    datar = rateCalculation2.main()#r.communicate()
-    return datar
+    datar = rateCalculation2.main(data)#r.communicate()
+    return jsonify(datar)
 
 #get /users
 @app.route('/users')

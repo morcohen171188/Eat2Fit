@@ -22,7 +22,6 @@ class CalcBestMatchDishes(object):
         dish_results = restLogic.calcDishesRates(self._userPreferences, self._ingredientsGroups, Dish)
         number_of_disliked = dish_results[1] if dish_results[1] != 0 else 1
         dish_rate = dish_results[0]
-        print ("\r")
         restLogic.recalcRatesByPreviouslyLiked(dish_rate, self._previouslyLiked, Dish)
         dish_score = dish_rate[Dish['name']]
 
@@ -59,9 +58,9 @@ def PreProcessUserPreferences(userPreferences, ingredientsGroups):
 
     return userPreferences
 
-def main():
+def main(data):
     pool_outputs = []
-    data = sys.argv[1]
+    #data = sys.argv[1]
     (rest_name, user_id) = util.parse_url_data(data)
     rest_name.replace("%20", " ")
     globals = Globals.Globals(user_id)
@@ -73,8 +72,8 @@ def main():
     for dish in Dishes:
         pool_outputs.append(worker.calculate(dish))
     top5 = sorted(pool_outputs, key=lambda x: list(x.values())[0], reverse=True)[:5]
-    print(top5)
-    return 'ok'
+    #print(top5)
+    return top5
 
 #if __name__ == "__main__":
  #   main()
