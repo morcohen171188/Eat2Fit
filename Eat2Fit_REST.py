@@ -11,7 +11,7 @@ db = dbHandler.dbHandler()
 
 @app.route('/')
 def home():
-    return jsonify("")
+    pass
 
 #post /user data: {name :}
 @app.route('/user' , methods=['POST'])
