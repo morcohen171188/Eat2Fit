@@ -68,7 +68,13 @@ class dbHandler:
             result_stractured_data = []
         return result_stractured_data
 
-    def UpdateUserPreviouslyLiked(self, user_id, Dishes):
+    def GetUserPreviouslyDisliked(self, user_id):
+        result_stractured_data = self.firebaseClient.get('/users/{0}/previouslyDisliked'.format(user_id), None)
+        if result_stractured_data is None:
+            result_stractured_data = []
+        return result_stractured_data
+
+    def UpdateUserPreviouslyLikedDisliked(self, user_id, Dishes):
 
         result_stractured_data = self.firebaseClient.get('/users/{0}/previouslyLiked'.format(user_id), None)
         if result_stractured_data is None or "none" in result_stractured_data:
@@ -81,6 +87,16 @@ class dbHandler:
                 if rest_dish['name'] == dishName:
                     result_stractured_data.append(rest_dish)
         self.firebaseClient.put('/users/{0}'.format(user_id),'previouslyLiked',result_stractured_data)
+
+        result_stractured_data = []
+
+        for dish in Dishes["DISLIKED"]:
+            restName, dishName = dish.split(":")
+            allDishesFromRest = self.GetAllDishesFromRestaurant(restName)
+            for rest_dish in allDishesFromRest:
+                if rest_dish['name'] == dishName:
+                    result_stractured_data.append(rest_dish)
+        self.firebaseClient.put('/users/{0}'.format(user_id),'previouslyDisliked',result_stractured_data)
 
     def UpdateUserLikedPreferences(self, user_id, likedIngredients):
         result_stractured_data = self.firebaseClient.get('/users/{0}/userPreferences/LIKED'.format(user_id), None)
@@ -109,7 +125,8 @@ class dbHandler:
             user_data['userPreferences']['LIKED'] = ["none"]
         if user_data['previouslyLiked'] == []:
             user_data['previouslyLiked'] = ["none"]
-
+        if user_data['previouslyDisliked'] == []:
+            user_data['previouslyDisliked'] = ["none"]
 
         self.firebaseClient.patch('/users/{0}'.format(new_user_id),user_data)
         return str(new_user_id)

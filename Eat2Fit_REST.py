@@ -11,7 +11,7 @@ db = dbHandler.dbHandler()
 
 @app.route('/')
 def home():
-    pass
+    return jsonify("")
 
 #post /user data: {name :}
 @app.route('/user' , methods=['POST'])
@@ -47,7 +47,7 @@ def update_user(userid):
 @app.route('/user/<string:userid>/updatepreviously' , methods=['POST'])
 def update_previously_liked(userid):
   request_data = request.get_json()
-  db.UpdateUserPreviouslyLiked(userid, request_data)
+  db.UpdateUserPreviouslyLikedDisliked(userid, request_data)
   return "200 ok"
 
 if __name__ == '__main__':

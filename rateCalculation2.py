@@ -14,15 +14,16 @@ ingredientsGroups = None
 
 class CalcBestMatchDishes(object):
 
-    def __init__(self, ingredientsGroups, userPreferences, previouslyLiked):
-        self._ingredientsGroups, self._userPreferences, self._previouslyLiked = ingredientsGroups, userPreferences, previouslyLiked
+    def __init__(self, ingredientsGroups, userPreferences, previouslyLiked, previouslyDisliked):
+        self._ingredientsGroups, self._userPreferences, \
+            self._previouslyLiked, self._previouslyDisliked = ingredientsGroups, userPreferences, previouslyLiked, previouslyDisliked
 
 
     def calculate(self, Dish):
         dish_results = restLogic.calcDishesRates(self._userPreferences, self._ingredientsGroups, Dish)
         number_of_disliked = dish_results[1] if dish_results[1] != 0 else 1
         dish_rate = dish_results[0]
-        restLogic.recalcRatesByPreviouslyLiked(dish_rate, self._previouslyLiked, Dish)
+        restLogic.recalcRatesByPreviouslyLikedDisliked(dish_rate, self._previouslyLiked, self._previouslyDisliked, Dish)
         dish_score = dish_rate[Dish['name']]
 
         if dish_score > 0:
@@ -71,7 +72,8 @@ def main(data):
     ingredientsGroups = globals.getIngredientsGroups()
     userPreferences = (PreProcessUserPreferences(globals.getUserPreferences(), ingredientsGroups))
     previouslyLiked = globals.getDb().GetUserPreviouslyLiked(user_id)
-    worker = CalcBestMatchDishes(ingredientsGroups, userPreferences, previouslyLiked)
+    previouslyDisliked = globals.getDb().GetUserPreviouslyDisliked(user_id)
+    worker = CalcBestMatchDishes(ingredientsGroups, userPreferences, previouslyLiked, previouslyDisliked)
     for dish in Dishes:
         pool_outputs.append(worker.calculate(dish))
     top5 = sorted(pool_outputs, key=lambda x: list(x.values())[0], reverse=True)[:5]
