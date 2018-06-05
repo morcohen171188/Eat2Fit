@@ -60,21 +60,19 @@ def PreProcessUserPreferences(userPreferences, ingredientsGroups):
 
 def main(data):
     pool_outputs = []
-    #data = sys.argv[1]
     (rest_name, user_id) = util.parse_url_data(data)
     rest_name.replace("%20", " ")
+    rest_name = rest_name.lower()
     globals = Globals.Globals(user_id)
-    ingredientsGroups = globals.getIngredientsGroups()
     Dishes = globals.getDb().GetAllDishesFromRestaurant(rest_name)
+    if Dishes == []:
+        return []
+
+    ingredientsGroups = globals.getIngredientsGroups()
     userPreferences = (PreProcessUserPreferences(globals.getUserPreferences(), ingredientsGroups))
     previouslyLiked = globals.getDb().GetUserPreviouslyLiked(user_id)
     worker = CalcBestMatchDishes(ingredientsGroups, userPreferences, previouslyLiked)
     for dish in Dishes:
         pool_outputs.append(worker.calculate(dish))
     top5 = sorted(pool_outputs, key=lambda x: list(x.values())[0], reverse=True)[:5]
-    #print(top5)
     return top5
-
-#if __name__ == "__main__":
- #   main()
-

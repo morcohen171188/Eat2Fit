@@ -35,12 +35,15 @@ class dbHandler:
         return result_stractured_data
 
     def GetAllDishesFromRestaurant(self, restaurantName):
-        restaurant_id = 0
+        restaurant_id = None
         restaurants_list = self.GetAllRestaurants()
         for restaurant in restaurants_list:
             if restaurant['restName'] == restaurantName:
                 restaurant_id = restaurant['restId']
                 break
+        if restaurant_id is None:
+            return []
+
         result_stractured_data = self.firebaseClient.get('/restaurants/{0}/Dishes'.format(restaurant_id), None)
         return result_stractured_data
 
