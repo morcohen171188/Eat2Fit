@@ -88,8 +88,9 @@ class dbHandler:
                     result_stractured_data.append(rest_dish)
         self.firebaseClient.put('/users/{0}'.format(user_id),'previouslyLiked',result_stractured_data)
 
-        result_stractured_data = []
-
+        result_stractured_data = self.firebaseClient.get('/users/{0}/previouslyDisliked'.format(user_id), None)
+        if result_stractured_data is None or "none" in result_stractured_data:
+            result_stractured_data = []
         for dish in Dishes["DISLIKED"]:
             restName, dishName = dish.split(":")
             allDishesFromRest = self.GetAllDishesFromRestaurant(restName)
