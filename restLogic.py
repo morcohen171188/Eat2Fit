@@ -9,6 +9,7 @@ def calcDishesRates(userPreferences, ingredientsGroups, Dish):
     dish_id = Dish['name']
     dish_results[dish_id] = 0
     for ingredient in Dish['ingredients']:
+        ingredient = ingredient.lower()
         if userPreferences["KOSHER"]:
             if (ingredient in ingredientsGroups["SEAFOOD"]):
                 dish_results[dish_id] = -1000
