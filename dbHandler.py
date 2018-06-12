@@ -1,7 +1,5 @@
 from firebase.firebase import FirebaseApplication
 from firebase.firebase import FirebaseAuthentication
-from string import Template
-import rateCalculation, json
 
 class dbHandler:
 

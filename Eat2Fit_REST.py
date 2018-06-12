@@ -1,7 +1,7 @@
 from flask import Flask,jsonify,request
 import subprocess
 import sys
-import rateCalculation2
+import rateCalculation
 import dbHandler
 
 
@@ -22,8 +22,7 @@ def create_user():
 #get /restaurant/<name> data: {name :}
 @app.route('/restaurant/<string:data>')
 def get_recommended_dishes(data):
-    #r = subprocess.Popen([sys.executable,'rateCalculation.py',data], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-    datar = rateCalculation2.main(data)#r.communicate()
+    datar = rateCalculation.main(data)
     return jsonify(datar)
 
 #get /users

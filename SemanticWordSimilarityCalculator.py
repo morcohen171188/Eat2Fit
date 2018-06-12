@@ -11,9 +11,7 @@ def calculateSemanticWordSimilarity(word1, wordList):
         synword2 = wordnet.synsets(word)
 
         if synword1 and synword2:
-            #for syn1 in synword1[:3]:
-                #for syn2 in synword2[:3]:
-                    #s = syn1.wup_similarity(syn2)
+            # the first word is the most commonly used
             s = synword1[0].wup_similarity(synword2[0])
             if s is not None:
                 result_list.append(s)
